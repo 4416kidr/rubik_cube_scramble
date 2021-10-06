@@ -35,8 +35,6 @@ def show_cube(cube):
     info: show cube state by text
     """
 
-    cube = geometric_net(cube)
-
     line = []
     for i in range(3*3+4):
         if i % 4 == 0:
@@ -84,15 +82,6 @@ def make_side(side):
             li[2] += str(side[i])
     return li
 
-
-def geometric_net(cube):
-    """
-    side0: 
-    012 -> 
-    345 -> 
-    678 -> 
-
-    """
 
 
     
