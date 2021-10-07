@@ -21,7 +21,7 @@ rind = [1, 2, 3]
 
 for w in rlist:
     for i in rind:
+        print(f'(w, i) = ({w}, {i})')
         cube = initialize()
         cube = r.flex(cube, w, i)
-        print(f'(w, i) = ({w}, {i})')
         show_cube(cube)
