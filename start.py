@@ -19,7 +19,7 @@ def set_side(color):
     """
     li = []
     for i in range(9):
-        li.append(color)
+        li.append(color + str(i))
     return li
 
 

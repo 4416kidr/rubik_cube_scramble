@@ -24,9 +24,9 @@
 
 """
 
-length = 3*4 + 5
+length = 6*4 + 5
 wbar = "="*length
-space = '   '
+space = ' '*6
 vvar = '|'
 
 def show_cube(cube):
