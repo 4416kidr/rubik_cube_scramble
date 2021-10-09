@@ -69,7 +69,7 @@ def get_list(r):
     rcolor = list()
     rblock = list()
     rside = -1
-    if r == 'B':
+    if r == 'U':
         # GOBR-0000-1111-2222
         rcolor = list('GOBR')
         rblock = [[0, 1, 2], [0, 1, 2], [0, 1, 2], [0, 1, 2]]
@@ -79,7 +79,7 @@ def get_list(r):
         rcolor = list('GYBW')
         rblock = [[0, 3, 6], [0, 3, 6], [8, 5, 2], [0, 3, 6]]
         rside = 1
-    elif r == 'U':
+    elif r == 'D':
         # WRYO-6028-7315-8602
         rcolor = list('WRYO')
         rblock = [[6, 7, 8], [0, 3, 6], [2, 1, 0], [8, 5, 2]]
@@ -89,9 +89,8 @@ def get_list(r):
         rcolor = list('GWBY')
         rblock = [[2, 5, 8], [2, 5, 8], [6, 3, 0], [2, 5, 8]]
         rside = 3
-    elif r == 'D':
+    elif r == 'B':
         # WOYR-0682-1375-2068
-
         rcolor = list('WOYR')
         rblock = [[0, 1, 2], [6, 3, 0], [8, 7, 6], [2, 5, 8]]
         rside = 4
