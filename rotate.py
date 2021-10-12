@@ -1,3 +1,17 @@
+import definition as defin
+dcolor = defin.color()
+
+class Rotate_data:
+    color, block, side = (), (), -1
+    def __init__(self, c, b, s):
+        self.color = c
+        self.block = b
+        self.side = s
+    def get(self):
+        return self.color, self.block, self.side
+
+rotate_data = []
+
 def flex(cube, r, ind):
     for i in range(ind):
         cube = rotate_cube(cube, r)
@@ -32,9 +46,9 @@ def rotate_cube(cube, r):
         [6, 3, 0, 7, 4, 1, 8, 5, 2]
     """
 
-    sc, sb, rside = get_list(r)
-    # rcolor = list('GRBO')
-    # rblock = [[6, 7, 8], [6, 7, 8], [6, 7, 8], [6, 7, 8]]
+    rl = tuple('ULFRBD')
+    rotate = rotate_data[rl.index(r)]
+    sc, sb, rside = rotate.get()
 
     # set first to kari
     kc = int(sc[3]) # 1(O)
@@ -52,6 +66,8 @@ def rotate_cube(cube, r):
     # set last from kari
     for i in range(len(kb)):
         cube[sc[0]][sb[0][i]] = str(kari[i])
+
+    
     
     # rotate side
     cube[rside] = rotate_side(cube[rside])
@@ -65,76 +81,45 @@ def rotate_side(side):
     
     return new
 
-def get_list(r):
-    rcolor = list()
-    rblock = list()
-    rside = -1
-    if r == 'U':
-        # GOBR-0000-1111-2222
-        rcolor = list('GOBR')
-        rblock = [[0, 1, 2], [0, 1, 2], [0, 1, 2], [0, 1, 2]]
-        rside = 0
-    elif r == 'L':
-        # GYBW-0080-3353-6626
-        rcolor = list('GYBW')
-        rblock = [[0, 3, 6], [0, 3, 6], [8, 5, 2], [0, 3, 6]]
-        rside = 1
-    elif r == 'D':
-        # WRYO-6028-7315-8602
-        rcolor = list('WRYO')
-        rblock = [[6, 7, 8], [0, 3, 6], [2, 1, 0], [8, 5, 2]]
-        rside = 2
-    elif r == 'R':
-        # GWBY-2262-5535-8808
-        rcolor = list('GWBY')
-        rblock = [[2, 5, 8], [2, 5, 8], [6, 3, 0], [2, 5, 8]]
-        rside = 3
-    elif r == 'B':
-        # WOYR-0682-1375-2068
-        rcolor = list('WOYR')
-        rblock = [[0, 1, 2], [6, 3, 0], [8, 7, 6], [2, 5, 8]]
-        rside = 4
-    elif r == 'F':
-        # GRBO-6666-7777-8888
-        rcolor = list('GRBO')
-        rblock = [[6, 7, 8], [6, 7, 8], [6, 7, 8], [6, 7, 8]]
-        rside = 5
+
+def initialize():
+
+    global rotate_data
+    rd = Rotate_data
+
+    # ULFRBD
+    db = (
+        (['G012', 'O012', 'B012', 'R012'], 'W'), # U
+        (['W036', 'G036', 'Y036', 'B852'], 'O'), # L
+        (['W678', 'R036', 'Y210', 'O852'], 'G'), # F
+        (['G258', 'W258', 'B630', 'Y258'], 'R'), # R
+        (['W012', 'O630', 'Y876', 'R258'], 'B'), # B
+        (['G678', 'R678', 'B678', 'O678'], 'Y'), # D
+        )
+
+    for i in range(len(db)):
+        a, b, c = transform(db[i][0], db[i][1])
+        rd = Rotate_data(a, b, c)
+        rotate_data.append(rd)
+
+def transform(rl, side):
+    # GOBR -> [2, 1, 4, 3]
+    color_list = [color_to_number(l[0]) for l in rl]
     
-    #文字を数値へと変換する
-    cstr = list('WOGRBY')
-    for i in range(len(rcolor)):
-        ind = cstr.index(rcolor[i])
-        rcolor[i] = ind
-    return rcolor, rblock, rside
+    side = color_to_number(side)
+    # ['258', '258', '630', '258']
+    block_list = [l[1: ] for l in rl]
+    # [[2, 5, 8], [2, 5, 8], [6, 3, 0], [2, 5, 8]]
+    block_list = [list(map(int, l)) for l in block_list]
 
-""" UFRDBL
-    # U
-    # before = [W6, W7, W8, R0, R3, R6, Y2, Y1, Y0, O8, O5, O2]
-    # WRYO-6028-7315-8602
-    # before = [[W, [6, 7, 8]], [R, [0, 3, 6]], [Y, [2, 1, 0]], [O, [8, 5, 2]]]
+    return color_list, block_list, side
 
-    # F
-    # before = [G6, G7, G8, R6, R7, R8, B6, B7, B8, O6, O7, O8]
-    # GRBO-6666-7777-8888
-    # before = [[G, [6, 7, 8]], [R, [6, 7, 8]], [B, [6, 7, 8]], [O, [6, 7, 8]]]
+def color_to_number(color):
+    """ 
+    文字を数値へと変換する
+    """
+    if color in dcolor:
+        ind = dcolor.index(color)
+        return ind
 
-    # R
-    # before = [G2, G5, G8, W2, W5, W8, B6, B3, B0, Y2, Y5, Y8]
-    # GWBY-2262-5535-8808
-    # before = [[G, [2, 5, 8]], [W, [2, 5, 8]], [B, [6, 3, 0]], [Y, [2, 5, 8]]]
-
-    # D
-    # before = [Y6, Y7, Y8, R8, R5, R2, W2, W1, W0, O0, O3, O6]
-    # WOYR-0682-1375-2068
-    # before = [[W, [0, 1, 2]], [O, [6, 3, 0]], [Y, [8, 7, 6]], [R, [2, 5, 8]]]
-
-    # B
-    # before = [G0, G1, G2, O0, O1, O2, B0, B1, B2, R0, R1, R2]
-    # GOBR-0000-1111-2222
-    # before = [[G, [0, 1, 2]], [O, [0, 1, 2]], [B, [0, 1, 2]], [R, [0, 1, 2]]]
-
-    # L
-    # before = [G0, G3, G6, Y0, Y3, Y6, B8, B5, B2, W0, W3, W6]
-    # GYBW-0080-3353-6626
-    # before = [[G, [0, 3, 6]], [Y, [0, 3, 6]], [B, [8, 5, 2]], [W, [0, 3, 6]]]
-"""
+initialize()
